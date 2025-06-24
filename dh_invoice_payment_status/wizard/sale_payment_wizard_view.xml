@@ -24,7 +24,7 @@
                         <page string="Invoices to Pay">
                             <field name="invoice_ids" readonly="1">
                                 <tree>
-                                    <field name="name"/>
+                                    <field name="display_name"/>
                                     <field name="invoice_date"/>
                                     <field name="invoice_date_due"/>
                                     <field name="amount_total"/>

@@ -22,15 +22,7 @@
                     </group>
                     <notebook>
                         <page string="Invoices to Pay">
-                            <field name="invoice_ids" readonly="1">
-                                <tree create="false" edit="false">
-                                    <field name="display_name"/>
-                                    <field name="date"/>
-                                    <field name="amount_total"/>
-                                    <field name="amount_residual"/>
-                                    <field name="payment_state" widget="badge"/>
-                                </tree>
-                            </field>
+                            <field name="invoice_ids" readonly="1"/>
                         </page>
                     </notebook>
                 </sheet>

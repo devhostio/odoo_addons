@@ -23,10 +23,9 @@
                     <notebook>
                         <page string="Invoices to Pay">
                             <field name="invoice_ids" readonly="1">
-                                <tree>
+                                <tree create="false" edit="false">
                                     <field name="display_name"/>
-                                    <field name="invoice_date"/>
-                                    <field name="invoice_date_due"/>
+                                    <field name="date"/>
                                     <field name="amount_total"/>
                                     <field name="amount_residual"/>
                                     <field name="payment_state" widget="badge"/>

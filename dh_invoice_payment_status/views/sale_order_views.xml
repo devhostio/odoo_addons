@@ -7,10 +7,7 @@
         <field name="inherit_id" ref="sale.view_order_tree"/>
         <field name="arch" type="xml">
             <field name="invoice_status" position="after">
-                <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
-                       decoration-warning="payment_status in ['partial', 'overdue']" 
-                       decoration-danger="payment_status == 'not_paid'"
-                       decoration-info="payment_status == 'no_invoice'"/>
+                <field name="payment_status" widget="badge"/>
             </field>
         </field>
     </record>
@@ -23,10 +20,7 @@
         <field name="arch" type="xml">
             <!-- Add payment status field in header -->
             <field name="invoice_status" position="after">
-                <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
-                       decoration-warning="payment_status in ['partial', 'overdue']" 
-                       decoration-danger="payment_status == 'not_paid'"
-                       decoration-info="payment_status == 'no_invoice'"/>
+                <field name="payment_status" widget="badge"/>
             </field>
             
             <!-- Add Register Payment button -->
@@ -75,10 +69,7 @@
             </field>
             <xpath expr="//div[hasclass('o_kanban_record_bottom')]" position="inside">
                 <div class="oe_kanban_bottom_left">
-                    <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
-                           decoration-warning="payment_status in ['partial', 'overdue']" 
-                           decoration-danger="payment_status == 'not_paid'"
-                           decoration-info="payment_status == 'no_invoice'"/>
+                    <field name="payment_status" widget="badge"/>
                 </div>
             </xpath>
         </field>

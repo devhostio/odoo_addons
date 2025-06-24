@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sale Order Tree View -->
+    <record id="view_order_tree_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.tree.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="after">
+                <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
+                       decoration-warning="payment_status in ['partial', 'overdue']" 
+                       decoration-danger="payment_status == 'not_paid'"
+                       decoration-info="payment_status == 'no_invoice'"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Sale Order Form View -->
+    <record id="view_order_form_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.form.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add payment status field in header -->
+            <field name="invoice_status" position="after">
+                <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
+                       decoration-warning="payment_status in ['partial', 'overdue']" 
+                       decoration-danger="payment_status == 'not_paid'"
+                       decoration-info="payment_status == 'no_invoice'"/>
+            </field>
+            
+            <!-- Add Register Payment button -->
+            <button name="action_quotation_send" position="before">
+                <button name="action_register_payment" 
+                        type="object" 
+                        string="Register Payment" 
+                        class="oe_highlight"
+                        attrs="{'invisible': [('payment_status', 'in', ['no_invoice', 'paid'])]}"
+                        groups="account.group_account_invoice"/>
+            </button>
+        </field>
+    </record>
+
+    <!-- Sale Order Search View -->
+    <record id="view_sales_order_filter_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.search.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <!-- Add payment status filters -->
+            <filter name="my_sale_orders_filter" position="after">
+                <separator/>
+                <filter string="No Invoice" name="no_invoice" domain="[('payment_status', '=', 'no_invoice')]"/>
+                <filter string="Not Paid" name="not_paid" domain="[('payment_status', '=', 'not_paid')]"/>
+                <filter string="Partially Paid" name="partial" domain="[('payment_status', '=', 'partial')]"/>
+                <filter string="Fully Paid" name="paid" domain="[('payment_status', '=', 'paid')]"/>
+                <filter string="Overdue" name="overdue" domain="[('payment_status', '=', 'overdue')]"/>
+            </filter>
+            
+            <!-- Add group by payment status -->
+            <filter name="customer" position="after">
+                <filter string="Payment Status" name="payment_status" domain="[]" context="{'group_by': 'payment_status'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Sale Order Kanban View -->
+    <record id="view_sale_order_kanban_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.kanban.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sale_order_kanban"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="after">
+                <field name="payment_status"/>
+            </field>
+            <xpath expr="//div[hasclass('o_kanban_record_bottom')]" position="inside">
+                <div class="oe_kanban_bottom_left">
+                    <field name="payment_status" widget="badge" decoration-success="payment_status == 'paid'" 
+                           decoration-warning="payment_status in ['partial', 'overdue']" 
+                           decoration-danger="payment_status == 'not_paid'"
+                           decoration-info="payment_status == 'no_invoice'"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

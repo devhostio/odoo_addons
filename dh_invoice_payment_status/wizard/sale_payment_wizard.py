@@ -48,8 +48,11 @@ class SalePaymentWizard(models.TransientModel):
             'journal_id': self.journal_id.id,
             'currency_id': self.currency_id.id,
             'payment_method_line_id': self.payment_method_line_id.id,
-            'ref': self.memo or self.sale_order_id.name,
         }
+        
+        # Add memo as payment reference if available
+        if self.memo:
+            payment_vals['payment_reference'] = self.memo
         
         payment = self.env['account.payment'].create(payment_vals)
         payment.action_post()

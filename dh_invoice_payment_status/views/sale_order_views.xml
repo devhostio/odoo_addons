@@ -7,7 +7,12 @@
         <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='state']" position="after">
-                <field name="payment_status" widget="badge"/>
+                <field name="payment_status" widget="badge"
+                       decoration-info="payment_status == 'not_paid'"
+                       decoration-danger="payment_status == 'overdue'"
+                       decoration-muted="payment_status == 'no_invoice'"
+                       decoration-warning="payment_status == 'partial'"
+                       decoration-success="payment_status == 'paid'"/>
             </xpath>
         </field>
     </record>
@@ -30,7 +35,12 @@
             
             <!-- Add payment status field after sale_order_template_id -->
             <xpath expr="//field[@name='sale_order_template_id']" position="after">
-                <field name="payment_status" widget="badge"/>
+                <field name="payment_status" widget="badge"
+                       decoration-info="payment_status == 'not_paid'"
+                       decoration-danger="payment_status == 'overdue'"
+                       decoration-muted="payment_status == 'no_invoice'"
+                       decoration-warning="payment_status == 'partial'"
+                       decoration-success="payment_status == 'paid'"/>
             </xpath>
         </field>
     </record>

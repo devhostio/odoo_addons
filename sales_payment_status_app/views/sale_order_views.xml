@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="sale_order_form_inherit" model="ir.ui.view">
+		<field name="name">sale.order.inherit</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//button[@id='action_confirm']" position="after">
+				<button class="oe_highlight"
+						type="object"
+						invisible="payment_status in ['fully_paid', 'no_invoice'] or state != 'sale'"
+						name="action_payment_register"
+						string="Register Payment"/>
+			</xpath>
+
+			<xpath expr="//field[@name='sale_order_template_id']" position="after">
+				<field name="payment_status" widget="badge"
+					decoration-info="payment_status == 'not_paid'"
+					decoration-danger="payment_status == 'overdue'"
+					decoration-muted="payment_status == 'no_invoice'"
+					decoration-warning="payment_status == 'partially_paid'"
+					decoration-success="payment_status == 'fully_paid'"/>
+				<field name="amount_due"/>
+				<field name="payment_id"/>
+				<field name="sale_payment_details" colspan="2" widget="payment"/>
+<!--				<field name="invoice_payments_widget" colspan="2" nolabel="1" widget="payment"/>-->
+			</xpath>
+
+
+			<xpath expr="//div[@name='button_box']" position="after">
+
+				<widget name="web_ribbon" title="No Invoice" bg_color="bg-muted"
+					invisible="payment_status != 'no_invoice'"/>
+
+				<widget name="web_ribbon" title="Overdue" bg_color="bg-danger"
+					invisible="payment_status != 'overdue'"/>
+
+				<widget name="web_ribbon" title="Not Paid" bg_color="bg-info"
+					invisible="payment_status != 'not_paid'"/>
+
+				<widget name="web_ribbon" title="Partially Paid" bg_color="bg-warning"
+					invisible="payment_status != 'partially_paid'"/>
+
+				<widget name="web_ribbon" title="Fully Paid" bg_color="bg-success"
+					invisible="payment_status != 'fully_paid'"/>
+
+			</xpath>
+		</field>
+	</record>
+
+	<record id="sale_order_tree_inherit" model="ir.ui.view">
+		<field name="name">sale.order.tree.inherit</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='state']" position="after">
+				<field name="payment_status"
+					   widget="badge"
+					   decoration-info="payment_status == 'not_paid'"
+					   decoration-danger="payment_status == 'overdue'"
+					   decoration-muted="payment_status == 'no_invoice'"
+					   decoration-warning="payment_status == 'partially_paid'"
+					   decoration-success="payment_status == 'fully_paid'"
+				/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_sale_payment_status_search" model="ir.ui.view">
+		<field name="name">sale.payment.status.search</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+		<field name="arch" type="xml">
+			<!-- <field name="payment_status"/> -->
+			<group expand="0" string="Group By">
+
+                <filter string="No Invoice" name="payment_status" 
+                		domain="[('payment_status','=','no_invoice')]" />
+
+                <filter string="Not Paid" name="payment_status" 
+                		domain="[('payment_status','=','not_paid')]" />
+
+                <filter string="Partial Paid" name="payment_status" 
+                		domain="[('payment_status','=','partially_paid')]" />
+
+				<filter string="Overdue Invoice" name="overdue"
+                		domain="[('payment_status','=','overdue')]" />
+
+                <filter string="Fully Paid" name="payment_status" 
+                		domain="[('payment_status','=','fully_paid')]" />
+            </group>
+		</field>
+	</record>
+ </odoo>

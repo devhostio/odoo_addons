@@ -4,11 +4,11 @@
     <record id="view_order_tree_payment_status" model="ir.ui.view">
         <field name="name">sale.order.tree.payment.status</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
         <field name="arch" type="xml">
-            <field name="invoice_status" position="after">
+            <xpath expr="//field[@name='state']" position="after">
                 <field name="payment_status" widget="badge"/>
-            </field>
+            </xpath>
         </field>
     </record>
 
@@ -18,19 +18,19 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <!-- Add payment status field after partner_id in the form -->
-            <field name="partner_id" position="after">
-                <field name="payment_status" widget="badge" readonly="1"/>
-            </field>
-            
-            <!-- Add Register Payment button in header -->
-            <xpath expr="//header" position="inside">
+            <!-- Add Register Payment button after action_confirm -->
+            <xpath expr="//button[@id='action_confirm']" position="after">
                 <button name="action_register_payment" 
                         type="object" 
                         string="Register Payment" 
                         class="oe_highlight"
-                        attrs="{'invisible': [('payment_status', 'in', ['no_invoice', 'paid'])]}"
+                        invisible="payment_status in ['no_invoice', 'paid'] or state != 'sale'"
                         groups="account.group_account_invoice"/>
+            </xpath>
+            
+            <!-- Add payment status field after sale_order_template_id -->
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="payment_status" widget="badge"/>
             </xpath>
         </field>
     </record>

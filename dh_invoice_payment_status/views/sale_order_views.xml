@@ -18,20 +18,20 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <!-- Add payment status field in header -->
-            <field name="invoice_status" position="after">
+            <!-- Add payment status field in header using xpath -->
+            <xpath expr="//form/header/field[@name='invoice_status']" position="after">
                 <field name="payment_status" widget="badge"/>
-            </field>
+            </xpath>
             
             <!-- Add Register Payment button -->
-            <button name="action_quotation_send" position="before">
+            <xpath expr="//form/header/button[@name='action_quotation_send']" position="before">
                 <button name="action_register_payment" 
                         type="object" 
                         string="Register Payment" 
                         class="oe_highlight"
                         attrs="{'invisible': [('payment_status', 'in', ['no_invoice', 'paid'])]}"
                         groups="account.group_account_invoice"/>
-            </button>
+            </xpath>
         </field>
     </record>
 

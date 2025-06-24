@@ -38,7 +38,7 @@ class SalePaymentWizard(models.TransientModel):
         if self.amount <= 0:
             raise UserError("Payment amount must be greater than zero.")
         
-        # Create payment
+        # Create payment with reconciled_invoice_ids to handle reconciliation automatically
         payment_vals = {
             'payment_type': 'inbound',
             'partner_type': 'customer',
@@ -48,6 +48,7 @@ class SalePaymentWizard(models.TransientModel):
             'journal_id': self.journal_id.id,
             'currency_id': self.currency_id.id,
             'payment_method_line_id': self.payment_method_line_id.id,
+            'reconciled_invoice_ids': [(6, 0, self.invoice_ids.ids)],  # This handles reconciliation
         }
         
         # Add memo as payment reference if available
@@ -56,20 +57,6 @@ class SalePaymentWizard(models.TransientModel):
         
         payment = self.env['account.payment'].create(payment_vals)
         payment.action_post()
-        
-        # Get the payment move line from the payment's journal entry
-        payment_move_line = payment.move_id.line_ids.filtered(
-            lambda line: line.account_id.account_type in ('asset_receivable', 'liability_payable')
-        )
-        
-        # Get invoice move lines to reconcile
-        invoice_move_lines = self.invoice_ids.mapped('line_ids').filtered(
-            lambda line: line.account_id.account_type in ('asset_receivable', 'liability_payable') and not line.reconciled
-        )
-        
-        # Reconcile payment with invoices
-        if payment_move_line and invoice_move_lines:
-            (payment_move_line | invoice_move_lines).reconcile()
         
         # Return action to refresh the sale order view
         return {

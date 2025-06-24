@@ -33,8 +33,8 @@
                         groups="account.group_account_invoice"/>
             </xpath>
             
-            <!-- Add payment status field after sale_order_template_id -->
-            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+            <!-- Add payment status field after partner_id -->
+            <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="payment_status" widget="badge"
                        decoration-info="payment_status == 'not_paid'"
                        decoration-danger="payment_status == 'overdue'"

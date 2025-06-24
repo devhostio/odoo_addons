@@ -57,13 +57,13 @@ class SalePaymentWizard(models.TransientModel):
         payment = self.env['account.payment'].create(payment_vals)
         payment.action_post()
         
-        # Get the payment move line
-        payment_move_line = payment.line_ids.filtered(
+        # Get the payment move line from the payment's journal entry
+        payment_move_line = payment.move_id.line_ids.filtered(
             lambda line: line.account_id.account_type in ('asset_receivable', 'liability_payable')
         )
         
         # Get invoice move lines to reconcile
-        invoice_move_lines = self.invoice_ids.line_ids.filtered(
+        invoice_move_lines = self.invoice_ids.mapped('line_ids').filtered(
             lambda line: line.account_id.account_type in ('asset_receivable', 'liability_payable') and not line.reconciled
         )
         
